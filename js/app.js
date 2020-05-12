@@ -1,6 +1,6 @@
 'use strict';
 
-var maxRounds = 6;
+var maxRounds = 26;
 
 var parentEl = document.getElementById('product1');
 
@@ -61,7 +61,7 @@ function getRandomProduct(){
     secondRandomIndex = randomNumber(0, allProducts.length-1);
   }
 
-  while(secondRandomIndex === thirdRandomIndex){
+  while(secondRandomIndex === thirdRandomIndex || randomIndex === thirdRandomIndex){
     thirdRandomIndex = randomNumber(0, allProducts.length-1);
   }
 
