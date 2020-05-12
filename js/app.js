@@ -1,8 +1,7 @@
 'use strict';
 
-// Create a constructor function that creates an object associated with each product, and has the following properties:
-// Name of the product
-// File path of image
+var maxRounds = 6;
+
 var parentEl = document.getElementById('product1');
 
 var clicksNumber = 0;
@@ -76,16 +75,36 @@ function getRandomProduct(){
   allProducts[thirdRandomIndex].views++;
 }
 
-parent.addEventListener('click', function(){
+parent.addEventListener('click', clicker);
+
+function clicker(event){
   var titleOfProductThatWasClickedOn = event.target.title;
 
   for(var i = 0; i<allProducts.length; i++){
     if(titleOfProductThatWasClickedOn === allProducts[i].title){
       allProducts[i].votes++;
     }
-    clicksNumber += 1;
   }
+  clicksNumber += 1;
 
-  getRandomProduct();
+  if (clicksNumber < maxRounds) {
+    getRandomProduct();
+  } else {
+    parent.removeEventListener('click', clicker);
+    renderResults();
 
-});
+    //remove EventListener
+  }
+}
+
+function renderResults (){
+
+  var momEl = document.getElementById('results');
+
+  for(var i=0; i<allProducts.length; i++){
+
+    var listItem = document.createElement('li');
+    listItem.textContent = `${allProducts[i].name} had ${allProducts[i].votes} votes and was shown ${allProducts[i].views} times`;
+    momEl.appendChild(listItem);
+  }
+}
