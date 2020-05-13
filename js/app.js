@@ -1,20 +1,22 @@
+/* eslint-disable indent */
 'use strict';
 
 var uniqueIndexArray = [];
-var maxRounds = 25;
+var maxRounds = 5;
 var names = [];
 var parentEl = document.getElementById('product1');
 var votes = [];
-var totalVotes = 0;
 var allProducts = [];
 var views = [];
+var totalVotes;
 
-function ProductImage(name, extension){
+function ProductImage(name, extension, votes=0, views=0){
   this.filePath = `img/${name}${extension}`;
+  this.extension = extension;
   this.alt = name;
   this.title = name;
-  this.votes = 0;
-  this.views = 0;
+  this.votes = votes;
+  this.views = views;
   allProducts.push(this);
 }
 
@@ -27,27 +29,57 @@ ProductImage.prototype.render = function(){
   parentEl.appendChild(imageElement);
 };
 
-new ProductImage('bag', '.jpg');
-new ProductImage('banana', '.jpg');
-new ProductImage('bathroom', '.jpg');
-new ProductImage('boots', '.jpg');
-new ProductImage('breakfast', '.jpg');
-new ProductImage('bubblegum', '.jpg');
-new ProductImage('chair', '.jpg');
-new ProductImage('cthulhu', '.jpg');
-new ProductImage('dog-duck', '.jpg');
-new ProductImage('dragon', '.jpg');
-new ProductImage('pen', '.jpg');
-new ProductImage('pet-sweep', '.jpg');
-new ProductImage('scissors', '.jpg');
-new ProductImage('shark', '.jpg');
-new ProductImage('sweep', '.png');
-new ProductImage('tauntaun', '.jpg');
-new ProductImage('unicorn', '.jpg');
-new ProductImage('usb', '.gif');
-new ProductImage('water-can', '.jpg');
-new ProductImage('wine-glass', '.jpg');
+function starter() {
+  var oldProductsFromLocalStorage = localStorage.getItem('products');
 
+  if (oldProductsFromLocalStorage){
+    oldProductsFromLocalStorage = JSON.parse(oldProductsFromLocalStorage);
+    console.log(oldProductsFromLocalStorage);
+    for (var i=0; i<oldProductsFromLocalStorage.length; i++){
+      var product = oldProductsFromLocalStorage[i];
+      var title = product.title;
+      var extension = product.extension;
+      var votes = product.votes;
+      var views = product.views;
+      new ProductImage(title, extension, votes, views);
+    }
+
+    //if things are in storage, then we recreate product images
+  } else {
+    new ProductImage('bag', '.jpg');
+    new ProductImage('banana', '.jpg');
+    new ProductImage('bathroom', '.jpg');
+    new ProductImage('boots', '.jpg');
+    new ProductImage('breakfast', '.jpg');
+    new ProductImage('bubblegum', '.jpg');
+    new ProductImage('chair', '.jpg');
+    new ProductImage('cthulhu', '.jpg');
+    new ProductImage('dog-duck', '.jpg');
+    new ProductImage('dragon', '.jpg');
+    new ProductImage('pen', '.jpg');
+    new ProductImage('pet-sweep', '.jpg');
+    new ProductImage('scissors', '.jpg');
+    new ProductImage('shark', '.jpg');
+    new ProductImage('sweep', '.png');
+    new ProductImage('tauntaun', '.jpg');
+    new ProductImage('unicorn', '.jpg');
+    new ProductImage('usb', '.gif');
+    new ProductImage('water-can', '.jpg');
+    new ProductImage('wine-glass', '.jpg');
+  }
+  var oldVotes = localStorage.getItem('totalVotes');
+  if (oldVotes){
+    totalVotes = parseInt(oldVotes);
+  } else {
+    totalVotes = 0;
+  }
+
+  displayImage();
+  displayImage();
+  displayImage();
+
+  parentEl.addEventListener('click', clicker);
+}
 
 function getRandomIndex(){
 
@@ -84,27 +116,28 @@ function clicker(event){
     if(titleOfProductThatWasClickedOn === allProducts[i].title){
       allProducts[i].votes++;
       totalVotes++;
-
-      if(totalVotes === maxRounds){
-
-        parentEl.removeEventListener('click', clicker);
-        makeNamesArray();
-      }
     }
   }
+  if(totalVotes === maxRounds){
 
-  displayImage();
-  displayImage();
-  displayImage();
+    parentEl.removeEventListener('click', clicker);
+    makeNamesArray();
+    localStorage.removeItem('products');
+    localStorage.removeItem('totalVotes');
+  } else {
+    var stringifiedProducts = JSON.stringify(allProducts);
+    console.log('here are my results: ' + stringifiedProducts);
+    localStorage.setItem('products', stringifiedProducts);
+    localStorage.setItem('totalVotes', totalVotes);
 
+    displayImage();
+    displayImage();
+    displayImage();
+
+  }
 }
 
-displayImage();
-displayImage();
-displayImage();
-
-
-parentEl.addEventListener('click', clicker);
+  //setting local storage
 
 function makeNamesArray(){
   for(var i=0; i<allProducts.length; i++){
@@ -112,9 +145,11 @@ function makeNamesArray(){
     votes.push(allProducts[i].votes);
     views.push(allProducts[i].views);
   }
- 
+
   generateChart();
 }
+
+
 
 function generateChart(){
   var ctx = document.getElementById('myChart').getContext('2d');
@@ -176,3 +211,5 @@ function generateChart(){
     }
   });
 }
+//function call that creates products and starts focus group rounds
+starter();
