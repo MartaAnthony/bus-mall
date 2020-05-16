@@ -8,8 +8,8 @@ body {
 
 header {
   padding: 30px;
-  background-color: rgb(211, 193, 248);
-}
+  background-image: url("https://media.giphy.com/media/NzSUEgbTWB7TW/giphy.gif");
+  }
 
 h1 {
   font-size: 36px;
@@ -38,6 +38,11 @@ nav li {
   padding: 0 10px 0 10px;
   border: 2px solid grey;
   background-color: rgb(189, 225, 249);
+  opacity: 0.75;
+}
+
+nav li:hover {
+  opacity: 1;
 }
 
 button {
@@ -46,16 +51,20 @@ button {
   height: 30px;
   margin: 50px 0px 50px 0px;
   background-color:rgba(255, 206, 86, 0.2);
+  box-shadow: 0 3px 1px 0 rgba(110, 83, 14, 0.2);
 }
 
-#content {
-  float: right;
+button:hover {
+  background-color: rgba(233, 177, 33, 0.2);
 }
+
+
+/* #content {
+  float: right;
+} */
 
 aside {
-  border-right: solid 1px grey;
-  float: left;
-  width: 300px;
+  width: 500px;
   height: 650px;
   margin-top: 30px;
   padding-right: 20px;
