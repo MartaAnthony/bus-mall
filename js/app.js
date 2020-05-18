@@ -2,7 +2,7 @@
 'use strict';
 
 var uniqueIndexArray = [];
-var maxRounds = 5;
+var maxRounds = 25;
 var names = [];
 var parentEl = document.getElementById('product1');
 var votes = [];
@@ -120,7 +120,7 @@ function clicker(event){
   }
   if(totalVotes === maxRounds){
 
-    parentEl.removeEventListener('click', clicker);
+    // parentEl.removeEventListener('click', clicker);
     makeNamesArray();
     localStorage.removeItem('products');
     localStorage.removeItem('totalVotes');
